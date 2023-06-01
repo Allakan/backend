@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import *
+from djoser.serializers import UserCreateSerializer
+from django.contrib.auth import get_user_model
 
 
 class AdvantagesSerializer(serializers.ModelSerializer):
@@ -41,3 +43,12 @@ class SubscribeGreenSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscribeGreen
         fields = '__all__'
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    phone_number = serializers.CharField()
+
+    class Meta(UserCreateSerializer.Meta):
+        model = get_user_model()
+        fields = ('email', 'username', 'password', 'phone_number')
+
