@@ -38,11 +38,10 @@ urlpatterns = [
     path('subscribption/<int:pk>/', SubscribptionDetail.as_view(), name='subscribption_detail'),
     path('subscribegreen/', SubscribeGreenList.as_view(), name='subscribegreen_list'),
     path('subscribegreen/<int:pk>/', SubscribeGreenDetail.as_view(), name='subscribegreen_detail'),
-    path('api/drf-auth/', include('rest_framework.urls')),
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.jwt')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/refresh/', TokenVerifyView.as_view(), name='token_verify'),    
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),    
 ]

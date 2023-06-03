@@ -199,3 +199,9 @@ DJOSER = {
 
 
 AUTH_USER_MODEL = 'redforceapp.CustomUser'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'redforceapp.backends.CustomEmailBackend',
+]

@@ -3,6 +3,8 @@ from rest_framework import generics, permissions
 from .models import *
 from .serializers import *
 from .permissions import *
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 # Create your views here.
 
 class AdvantagesList(generics.ListCreateAPIView):
@@ -84,3 +86,7 @@ class SubscribeGreenDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = SubscribeGreen.objects.all()
     serializer_class = SubscribeGreenSerializer
     permission_classes = (IsAdminOrReadOnly, )
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import *
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class AdvantagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,4 +51,11 @@ class CustomUserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = get_user_model()
         fields = ('email', 'username', 'password', 'phone_number')
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'
+
+
+
 
