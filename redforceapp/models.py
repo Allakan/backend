@@ -72,3 +72,4 @@ class SubscribeGreen(models.Model):
 
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True)
+    email = models.EmailField(unique=True)
