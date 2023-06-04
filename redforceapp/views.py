@@ -5,6 +5,8 @@ from .serializers import *
 from .permissions import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
+from django.contrib.auth import get_user_model
+
 # Create your views here.
 
 class AdvantagesList(generics.ListCreateAPIView):
@@ -90,3 +92,8 @@ class SubscribeGreenDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    
+
+class CustomUserUpdateView(generics.UpdateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = CustomUserCreateSerializer

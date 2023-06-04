@@ -43,5 +43,6 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),    
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/update/<int:pk>/', CustomUserUpdateView.as_view(), name='user-update')
 ]
