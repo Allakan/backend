@@ -3,6 +3,7 @@ from .models import *
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.hashers import make_password
 
 class AdvantagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,11 +47,14 @@ class SubscribeGreenSerializer(serializers.ModelSerializer):
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
-    phone_number = serializers.CharField()
+    phone_number = serializers.CharField(required=False)
+    password = serializers.CharField(write_only=False)
+    email = serializers.EmailField(required=False)
+    username = serializers.CharField(required=False)
 
     class Meta(UserCreateSerializer.Meta):
-        model = get_user_model()
-        fields = ('email', 'username', 'password', 'phone_number')
+        model = CustomUser
+        fields = ('email', 'username', 'password', 'phone_number', 'subscribe')
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

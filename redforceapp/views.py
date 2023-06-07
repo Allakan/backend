@@ -6,6 +6,9 @@ from .permissions import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from datetime import timedelta
+from django.utils import timezone
 
 # Create your views here.
 
@@ -93,7 +96,44 @@ class SubscribeGreenDetail(generics.RetrieveUpdateDestroyAPIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     
-
-class CustomUserUpdateView(generics.UpdateAPIView):
-    queryset = get_user_model().objects.all()
+class CustomUserUpdateList(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
     serializer_class = CustomUserCreateSerializer
+
+
+class CustomUserUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserCreateSerializer
+    def partial_update(self, request, *args, **kwargs):
+        # Hash the password if present in the request data
+        if 'password' in request.data:
+            request.data['password'] = make_password(request.data['password'])
+
+        return super().partial_update(request, *args, **kwargs)
+    
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class CustomUserStats(APIView):
+    def get(self, request, format=None):
+        total_users = CustomUser.objects.count()
+        white_subscribers = CustomUser.objects.filter(subscribe='white').count()
+        green_subscribers = CustomUser.objects.filter(subscribe='green').count()
+
+
+        online_threshold = timezone.now() - timedelta(minutes=5)
+
+        online_users = CustomUser.objects.filter(
+            last_login__gte=online_threshold,
+            last_login__isnull=False
+        ).count()
+        
+        data = {
+            'total_users': total_users,
+            'white_subscribers': white_subscribers,
+            'green_subscribers': green_subscribers,
+            'online_users': online_users
+        }
+        
+        return Response(data)

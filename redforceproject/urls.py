@@ -44,5 +44,7 @@ urlpatterns = [
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('api/update/<int:pk>/', CustomUserUpdateView.as_view(), name='user-update')
+    path('api/update/', CustomUserUpdateList.as_view(), name='user-list'),
+    path('api/update/<int:pk>/', CustomUserUpdateView.as_view(), name='user-update'),
+    path('api/userstats/', CustomUserStats.as_view(), name="user_stats")
 ]
