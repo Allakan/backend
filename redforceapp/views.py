@@ -121,19 +121,11 @@ class CustomUserStats(APIView):
         white_subscribers = CustomUser.objects.filter(subscribe='white').count()
         green_subscribers = CustomUser.objects.filter(subscribe='green').count()
 
-
-        online_threshold = timezone.now() - timedelta(minutes=5)
-
-        online_users = CustomUser.objects.filter(
-            last_login__gte=online_threshold,
-            last_login__isnull=False
-        ).count()
         
         data = {
             'total_users': total_users,
             'white_subscribers': white_subscribers,
             'green_subscribers': green_subscribers,
-            'online_users': online_users
         }
         
         return Response(data)
