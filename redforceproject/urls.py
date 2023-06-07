@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from redforceapp.views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -47,4 +49,4 @@ urlpatterns = [
     path('api/update/', CustomUserUpdateList.as_view(), name='user-list'),
     path('api/update/<int:pk>/', CustomUserUpdateView.as_view(), name='user-update'),
     path('api/userstats/', CustomUserStats.as_view(), name="user_stats")
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
