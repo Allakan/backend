@@ -59,6 +59,15 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = 'email'
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Update the last_login field for the user
+        user = self.user
+        user.last_login = timezone.now()
+        user.save()
+
+        return data
 
 
 

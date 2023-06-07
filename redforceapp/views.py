@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.utils import timezone
 
 # Create your views here.
@@ -101,7 +101,7 @@ class CustomUserUpdateList(generics.ListAPIView):
     serializer_class = CustomUserCreateSerializer
 
 
-class CustomUserUpdateView(generics.RetrieveUpdateAPIView):
+class CustomUserUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserCreateSerializer
     def partial_update(self, request, *args, **kwargs):
@@ -110,6 +110,12 @@ class CustomUserUpdateView(generics.RetrieveUpdateAPIView):
             request.data['password'] = make_password(request.data['password'])
 
         return super().partial_update(request, *args, **kwargs)
+    def update(self, request, *args, **kwargs):
+        # Hash the password if present in the request data
+        if 'password' in request.data:
+            request.data['password'] = make_password(request.data['password'])
+
+        return super().update(request, *args, **kwargs)
     
 
 from rest_framework.views import APIView
@@ -121,11 +127,15 @@ class CustomUserStats(APIView):
         white_subscribers = CustomUser.objects.filter(subscribe='white').count()
         green_subscribers = CustomUser.objects.filter(subscribe='green').count()
 
+        five_minutes_ago = timezone.now() - timezone.timedelta(minutes=5)
+        online_users = CustomUser.objects.filter(last_login__gte=five_minutes_ago).count()
+
         
         data = {
             'total_users': total_users,
             'white_subscribers': white_subscribers,
             'green_subscribers': green_subscribers,
+            'online_users': online_users,
         }
         
         return Response(data)
