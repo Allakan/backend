@@ -8,11 +8,6 @@ import jwt
 
 # Create your models here.
 
-class MultipleImageField(models.ImageField):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.multi_upload = True
-
 
 class Advantages(models.Model):
     users = models.IntegerField()

@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from datetime import timedelta, datetime
 from django.utils import timezone
+from django.contrib.auth.password_validation import validate_password
+from rest_framework import viewsets
 
 # Create your views here.
 
@@ -108,8 +110,9 @@ class CustomUserUpdateView(generics.RetrieveUpdateDestroyAPIView):
         # Hash the password if present in the request data
         if 'password' in request.data:
             request.data['password'] = make_password(request.data['password'])
-
+            
         return super().partial_update(request, *args, **kwargs)
+    
     def update(self, request, *args, **kwargs):
         # Hash the password if present in the request data
         if 'password' in request.data:
