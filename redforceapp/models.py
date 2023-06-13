@@ -4,7 +4,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
 import jwt
-
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -58,6 +59,9 @@ class Subscribption(models.Model):
     point3 = models.CharField(max_length=100)
     point4 = models.CharField(max_length=100)
     note = models.TextField()
+@receiver(pre_save, sender=Subscribption)
+def add_currency_symbol(sender, instance, **kwargs):
+    instance.price = f'{instance.price} Р' 
 
 class SubscribeGreen(models.Model):
     quantity = models.IntegerField()
@@ -68,6 +72,9 @@ class SubscribeGreen(models.Model):
     point3 = models.CharField(max_length=100)
     point4 = models.CharField(max_length=100)
     note = models.TextField()
+@receiver(pre_save, sender=SubscribeGreen)
+def add_currency_symbol(sender, instance, **kwargs):
+    instance.price = f'{instance.price} Р' 
 
 
 class CustomUser(AbstractUser):
