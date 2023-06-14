@@ -51,7 +51,7 @@ class Rating(models.Model):
 
 
 class Subscribption(models.Model):
-    quantity = models.IntegerField()
+    quantity = models.CharField(max_length=100)
     price = models.CharField(max_length=50)
     audience = models.CharField(max_length=50)
     point1 = models.CharField(max_length=100)
@@ -59,12 +59,9 @@ class Subscribption(models.Model):
     point3 = models.CharField(max_length=100)
     point4 = models.CharField(max_length=100)
     note = models.TextField()
-@receiver(pre_save, sender=Subscribption)
-def add_currency_symbol(sender, instance, **kwargs):
-    instance.price = f'{instance.price} Р' 
 
 class SubscribeGreen(models.Model):
-    quantity = models.IntegerField()
+    quantity = models.CharField(max_length=100)
     price = models.CharField(max_length=50)
     audience = models.CharField(max_length=50)
     point1 = models.CharField(max_length=100)
@@ -74,7 +71,7 @@ class SubscribeGreen(models.Model):
     note = models.TextField()
 @receiver(pre_save, sender=SubscribeGreen)
 def add_currency_symbol(sender, instance, **kwargs):
-    instance.price = f'{instance.price} Р' 
+    instance.price = f'{instance.price} ₽' 
 
 
 class CustomUser(AbstractUser):
