@@ -62,7 +62,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Update the last_login field for the user
         user = self.user
         user.last_login = timezone.now()
         user.save()

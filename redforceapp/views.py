@@ -102,23 +102,38 @@ class CustomUserUpdateList(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserCreateSerializer
 
-
+from rest_framework import status
+from rest_framework.response import Response
+from django.db.models import Q
 class CustomUserUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserCreateSerializer
     def partial_update(self, request, *args, **kwargs):
-        # Hash the password if present in the request data
         if 'password' in request.data:
             request.data['password'] = make_password(request.data['password'])
             
         return super().partial_update(request, *args, **kwargs)
     
     def update(self, request, *args, **kwargs):
-        # Hash the password if present in the request data
         if 'password' in request.data:
             request.data['password'] = make_password(request.data['password'])
 
         return super().update(request, *args, **kwargs)
+ 
+    def post(self, request, *args, **kwargs):
+        phone_number = request.data.get('phone_number')
+        email = request.data.get('email')
+        username = request.data.get('username')
+        new_password = request.data.get('password')
+        
+        if CustomUser.objects.filter(phone_number=phone_number).exists() or \
+                CustomUser.objects.filter(email=email).exists() or \
+                CustomUser.objects.filter(username=username).exists():
+            user = CustomUser.objects.get(Q(phone_number=phone_number) & Q(email=email) & Q(username=username))
+            user.set_password(new_password)
+            user.save()
+            return Response({'detail': 'Password updated successfully.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
     
 
 from rest_framework.views import APIView
