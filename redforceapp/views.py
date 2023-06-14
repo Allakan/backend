@@ -11,6 +11,9 @@ from datetime import timedelta, datetime
 from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.response import Response
+from django.db.models import Q
 
 # Create your views here.
 
@@ -102,9 +105,20 @@ class CustomUserUpdateList(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserCreateSerializer
 
-from rest_framework import status
-from rest_framework.response import Response
-from django.db.models import Q
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email', None)
+        if email is None:
+            return Response({'error': 'Email is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Проверка наличия пользователя с заданным email
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User with the provided email does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Возвращаем только id пользователя
+        return Response({'id': user.id}, status=status.HTTP_200_OK)
+
 class CustomUserUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserCreateSerializer
