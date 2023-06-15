@@ -14,6 +14,8 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -139,6 +141,11 @@ class CustomUserUpdateView(generics.RetrieveUpdateDestroyAPIView):
         email = request.data.get('email')
         username = request.data.get('username')
         new_password = request.data.get('password')
+        
+        try:
+            validate_password(new_password)
+        except ValidationError as e:
+            return Response({'detail': e.messages}, status=status.HTTP_400_BAD_REQUEST)
         
         if CustomUser.objects.filter(phone_number=phone_number).exists() or \
                 CustomUser.objects.filter(email=email).exists() or \
