@@ -14,16 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include, re_path
 from redforceapp.views import *
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from django.conf import settings
-from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     path('advantages/', AdvantagesList.as_view(), name='advantages_list'),
     path('advantages/<int:pk>/', AdvantagesDetail.as_view(), name='advantages_detail'),
     path('advantagesimage/', AdvantagesImageList.as_view(), name='advantagesimage_list'),
@@ -49,4 +45,4 @@ urlpatterns = [
     path('api/update/', CustomUserUpdateList.as_view(), name='user-list'),
     path('api/update/<int:pk>/', CustomUserUpdateView.as_view(), name='user-update'),
     path('api/userstats/', CustomUserStats.as_view(), name="user_stats")
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

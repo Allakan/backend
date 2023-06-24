@@ -1,16 +1,12 @@
-from django.shortcuts import render
-from rest_framework import generics, permissions
+from rest_framework import generics
 from .models import *
 from .serializers import *
 from .permissions import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
-from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from datetime import timedelta, datetime
 from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
-from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
@@ -38,6 +34,7 @@ class AdvantagesImageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = AdvantagesImage.objects.all()
     serializer_class = AdvantagesImageSerializer
     permission_classes = (IsAdminOrReadOnly, )
+
 
 class FeedbackList(generics.ListCreateAPIView):
     queryset = Feedback.objects.all()
@@ -74,10 +71,12 @@ class RatingList(generics.ListCreateAPIView):
     serializer_class = RatingSerializer
     permission_classes = (IsAdminOrReadOnly, )
 
+
 class RatingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
     permission_classes = (IsAdminOrReadOnly, )
+
 
 class SubscribptionList(generics.ListCreateAPIView):
     queryset = Subscribption.objects.all()
@@ -112,13 +111,11 @@ class CustomUserUpdateList(generics.ListAPIView):
         if email is None:
             return Response({'error': 'Email is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Проверка наличия пользователя с заданным email
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             return Response({'error': 'User with the provided email does not exist.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Возвращаем только id пользователя
         return Response({'id': user.id}, status=status.HTTP_200_OK)
 
 class CustomUserUpdateView(generics.RetrieveUpdateDestroyAPIView):

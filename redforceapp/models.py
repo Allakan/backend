@@ -1,11 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
-from datetime import timedelta
-from django.conf import settings
-import jwt
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from storages.backends.gcloud import GoogleCloudStorage
 
 # Create your models here.
 
@@ -17,14 +14,25 @@ class Advantages(models.Model):
     rating = models.IntegerField()
 
 class AdvantagesImage(models.Model):
-    image1 = models.ImageField(upload_to='photos/advantages/')
-    image2 = models.ImageField(upload_to='photos/advantages/')
-    image3 = models.ImageField(upload_to='photos/advantages/')
-    image4 = models.ImageField(upload_to='photos/advantages/')
-    image5 = models.ImageField(upload_to='photos/advantages/')
+    image1 = models.ImageField(upload_to='advantages/', storage=GoogleCloudStorage())
+    image1_name = models.CharField(max_length=255, blank=True)
+    
+    image2 = models.ImageField(upload_to='advantages/', storage=GoogleCloudStorage())
+    image2_name = models.CharField(max_length=255, blank=True)
+    
+    image3 = models.ImageField(upload_to='advantages/', storage=GoogleCloudStorage())
+    image3_name = models.CharField(max_length=255, blank=True)
+    
+    image4 = models.ImageField(upload_to='advantages/', storage=GoogleCloudStorage())
+    image4_name = models.CharField(max_length=255, blank=True)
+    
+    image5 = models.ImageField(upload_to='advantages/', storage=GoogleCloudStorage())
+    image5_name = models.CharField(max_length=255, blank=True)
+    
 
 class Feedback(models.Model):
-    fbimage = models.ImageField(upload_to='photos/feedback/')
+    fbimage = models.ImageField(upload_to='feedback/', storage=GoogleCloudStorage())
+    image1_name = models.CharField(max_length=255, blank=True)
     name = models.CharField(max_length=80)
     STARS_CHOISES = [(i,str(i)) for i in range(1,6)]
     stars = models.IntegerField(choices=STARS_CHOISES)
@@ -41,11 +49,20 @@ class Contacts(models.Model):
     accmail = models.CharField(max_length=50)
 
 class Rating(models.Model):
-    image1 = models.ImageField(upload_to='photos/rating/')
-    image2 = models.ImageField(upload_to='photos/rating/')
-    image3 = models.ImageField(upload_to='photos/rating/')
-    image4 = models.ImageField(upload_to='photos/rating/')
-    image5 = models.ImageField(upload_to='photos/rating/')
+    image1 = models.ImageField(upload_to='raiting/', storage=GoogleCloudStorage())
+    image1_name = models.CharField(max_length=255, blank=True)
+    
+    image2 = models.ImageField(upload_to='raiting/', storage=GoogleCloudStorage())
+    image2_name = models.CharField(max_length=255, blank=True)
+    
+    image3 = models.ImageField(upload_to='raiting/', storage=GoogleCloudStorage())
+    image3_name = models.CharField(max_length=255, blank=True)
+    
+    image4 = models.ImageField(upload_to='raiting/', storage=GoogleCloudStorage())
+    image4_name = models.CharField(max_length=255, blank=True)
+    
+    image5 = models.ImageField(upload_to='raiting/', storage=GoogleCloudStorage())
+    image5_name = models.CharField(max_length=255, blank=True)
     rate = models.DecimalField(max_digits=10, decimal_places=2)
     feedbacks = models.IntegerField()
 

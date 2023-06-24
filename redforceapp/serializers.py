@@ -1,9 +1,8 @@
 from rest_framework import serializers
 from .models import *
 from djoser.serializers import UserCreateSerializer
-from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth.hashers import make_password
+from datetime import timezone
 
 class AdvantagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,10 +14,27 @@ class AdvantagesImageSerializer(serializers.ModelSerializer):
         model = AdvantagesImage
         fields = '__all__'
 
+    def get_image1_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image1.name}'
+
+    def get_image2_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image2.name}'
+
+    def get_image3_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image3.name}'
+
+    def get_image4_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image4.name}'
+
+    def get_image5_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image5.name}'
+
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = '__all__'
+    def fbimage_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.fbimage.name}'
 
 class FaqSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,6 +50,20 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
+    def get_image1_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image1.name}'
+
+    def get_image2_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image2.name}'
+
+    def get_image3_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image3.name}'
+
+    def get_image4_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image4.name}'
+
+    def get_image5_name(self, obj):
+        return f'https://storage.cloud.google.com/testrfbucket/{obj.image5.name}'
 
 class SubscribptionSerializer(serializers.ModelSerializer):
     class Meta:
